@@ -22,7 +22,7 @@ function closeEdit() {
 
 // Функция для submit
 
-function formSubmitHandler(evt) {
+function handleFormSubmit(evt) {
   evt.preventDefault();
 
   name.textContent = nameInput.value;
@@ -33,4 +33,4 @@ function formSubmitHandler(evt) {
 
 popupOpenEdit.addEventListener('click', openEdit);
 popCloseButton.addEventListener('click', closeEdit);
-formElement.addEventListener('submit', formSubmitHandler);
+formElement.addEventListener('submit', handleFormSubmit);
