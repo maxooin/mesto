@@ -1,11 +1,3 @@
-const buttonLike = document.querySelectorAll('.element__like-button');
-
-buttonLike.forEach((buttonLike) => {
-  buttonLike.addEventListener('click', function (evt) {
-    evt.target.classList.toggle('element__like-button_active')
-  })
-})
-
 const popup = document.querySelector('.popup');
 const popupOpenEdit = document.querySelector('.profile__edit-button');
 const popCloseButton = document.querySelector('.popup__close-button');
@@ -15,6 +7,7 @@ let jobInput = formElement.querySelector('.popup__job');
 let name = document.querySelector('.profile__name');
 let job = document.querySelector('.profile__job');
 
+// Функция для открытия popup
 function openEdit() {
   popup.classList.add('popup_opened');
 
@@ -22,11 +15,12 @@ function openEdit() {
   jobInput.value = job.textContent;
 }
 
-popupOpenEdit.addEventListener('click', (openEdit));
+// Функция для закрытия popup
+function closeEdit() {
+  popup.classList.remove('popup_opened')
+}
 
-popCloseButton.addEventListener('click', () => {
-  popup.classList.remove('popup_opened');
-})
+// Функция для submit
 
 function formSubmitHandler(evt) {
   evt.preventDefault();
@@ -34,7 +28,9 @@ function formSubmitHandler(evt) {
   name.textContent = nameInput.value;
   job.textContent = jobInput.value;
 
-  return popup.classList.remove('popup_opened');
+  closeEdit();
 }
 
+popupOpenEdit.addEventListener('click', openEdit);
+popCloseButton.addEventListener('click', closeEdit);
 formElement.addEventListener('submit', formSubmitHandler);
