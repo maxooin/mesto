@@ -5,6 +5,12 @@
   border-bottom: 1px solid rgba(84, 84, 84, 0.7);
 }
 
+@media screen and (max-width: 1023px) {
+  .header {
+    width: calc(100% - 150px);
+  }
+}
+
 @media screen and (max-width: 767px) {
   .header {
     margin: 0;

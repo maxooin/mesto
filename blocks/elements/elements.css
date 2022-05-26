@@ -6,6 +6,13 @@
   gap: 20px 17px;
 }
 
+@media screen and (max-width: 1023px) {
+  .elements {
+    width: calc(100% - 150px);
+  }
+}
+
+
 @media screen and (max-width: 767px) {
   .elements {
     margin: 36px auto 0;
