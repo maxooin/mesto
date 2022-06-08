@@ -29,7 +29,7 @@
     </section>
 
     <section class="elements">
-      <article class="element">
+     <!-- <article class="element">
         <img alt="Фотография карточки" class="element__image" src="image/kirill-pershin-1088404-unsplash.jpg">
         <div class="element__info">
           <h2 class="element__title">Карачаевск</h2>
@@ -75,7 +75,7 @@
           <h2 class="element__title">Карачаево-Черкессия</h2>
           <button class="element__like-button" type="button"></button>
         </div>
-      </article>
+      </article>-->
     </section>
   </main>
 
@@ -98,6 +98,16 @@
     </div>
   </div>
 
-  <script src="scripts/script.js"></script>
+  <template class="template-element">
+    <article class="element">
+      <img alt="" class="element__image" src="">
+      <div class="element__info">
+        <h2 class="element__title"></h2>
+        <button class="element__like-button" type="button"></button>
+      </div>
+    </article>
+  </template>
+
+  <script src="scripts/script.js" type="module"></script>
 </body>
 </html>
