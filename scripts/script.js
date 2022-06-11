@@ -34,19 +34,32 @@ function renderList() {
 renderList();
 
 // переменные
-const popup = document.querySelector('.popup');
+const popupAdd = document.querySelector('.popup_add-form');
+const addButton = document.querySelector('.profile__add-button');
+
+const addCloseButton = document.querySelector('.popup__add-close');
+
+const popupEdit = document.querySelector('.popup_edit-form');
 const popupOpenEdit = document.querySelector('.profile__edit-button');
-const popCloseButton = document.querySelector('.popup__close-button');
-const formElement = document.querySelector('.popup__form');
-let nameInput = formElement.querySelector('.popup__input_value_name');
-let jobInput = formElement.querySelector('.popup__input_value_job');
+const popCloseButton = document.querySelector('.popup__edit-close');
+const formEdit = document.querySelector('.popup__form_edit');
+let nameInput = formEdit.querySelector('.popup__input_value_name');
+let jobInput = formEdit.querySelector('.popup__input_value_job');
 let userName = document.querySelector('.profile__name');
 let userJob = document.querySelector('.profile__job');
 
 
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+}
+
 // Функция для открытия popup
 function openEdit() {
-  popup.classList.add('popup_opened');
+  openPopup(popupEdit);
 
   nameInput.value = userName.textContent;
   jobInput.value = userJob.textContent;
@@ -54,7 +67,7 @@ function openEdit() {
 
 // Функция для закрытия popup
 function closeEdit() {
-  popup.classList.remove('popup_opened')
+  closePopup(popupEdit);
 }
 
 // Функция для submit
@@ -68,6 +81,8 @@ function handleFormSubmit(evt) {
   closeEdit();
 }
 
+addButton.addEventListener('click', () => openPopup(popupAdd));
+addCloseButton.addEventListener('click', () => closePopup(popupAdd));
 popupOpenEdit.addEventListener('click', openEdit);
 popCloseButton.addEventListener('click', closeEdit);
-formElement.addEventListener('submit', handleFormSubmit);
+formEdit.addEventListener('submit', handleFormSubmit);
