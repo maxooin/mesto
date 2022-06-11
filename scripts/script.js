@@ -5,6 +5,9 @@ const popupAdd = document.querySelector('.popup_add-form');
 const addButton = document.querySelector('.profile__add-button');
 
 const addCloseButton = document.querySelector('.popup__add-close');
+const addForm = document.querySelector('.popup__form_add');
+const titleInput = addForm.querySelector('.popup__input_value_title');
+const urlInput = addForm.querySelector('.popup__input_value_url');
 
 const popupEdit = document.querySelector('.popup_edit-form');
 const popupOpenEdit = document.querySelector('.profile__edit-button');
@@ -52,7 +55,7 @@ function handleFormSubmit(evt) {
 }
 
 // Функция создания элемента и вставления из шаблона
-function createCard(item) {
+function createElement(item) {
   const templateElement = document.querySelector('.template-element').content;
   const element = templateElement.querySelector('.element').cloneNode(true);
   const elementImage = element.querySelector('.element__image');
@@ -72,9 +75,18 @@ function createCard(item) {
 //Функция отрисовки элемента
 function renderList() {
   const result = initialCards.map(item => {
-    return createCard(item);
+    return createElement(item);
   });
   elementsSection.append(...result);
+}
+//Функция добавления нового элемента
+function handleAddElement(evt) {
+  evt.preventDefault();
+
+  const newElement = createElement({name: titleInput.value, link: urlInput.value});
+  elementsSection.prepend(newElement);
+  closePopup(popupAdd);
+  addForm.reset();
 }
 
 renderList();
@@ -82,6 +94,7 @@ renderList();
 //Слушатели на кнопках и формах
 addButton.addEventListener('click', () => openPopup(popupAdd));
 addCloseButton.addEventListener('click', () => closePopup(popupAdd));
+addForm.addEventListener('submit', handleAddElement);
 popupOpenEdit.addEventListener('click', openEdit);
 popupCloseButton.addEventListener('click', () => closePopup(popupEdit));
 formEdit.addEventListener('submit', handleFormSubmit);
