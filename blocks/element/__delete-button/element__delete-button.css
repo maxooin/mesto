@@ -4,8 +4,14 @@
   position: absolute;
   top: 20px;
   right: 20px;
+  padding: 0;
   border: none;
   background-color: transparent;
   background-image: url("../../../image/icon/delete-button.svg");
   cursor: pointer;
+  transition: opacity 0.5s;
+}
+
+.element__delete-button:hover {
+  opacity: .6;
 }
