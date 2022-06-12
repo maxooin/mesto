@@ -39,7 +39,7 @@
 
   <div class="popup popup_edit-form">
     <div class="popup__container">
-      <button aria-label="Close" class="popup__close-button popup__edit-close" type="button"></button>
+      <button aria-label="Close" class="popup__close-button popup__close-button_type_edit" type="button"></button>
       <h2 class="popup__heading">Редактировать профиль</h2>
       <form name="popup-edit-form" class="popup__form popup__form_edit">
 
@@ -54,9 +54,9 @@
 
   <div class="popup popup_add-form">
     <div class="popup__container">
-      <button aria-label="Close" class="popup__close-button popup__add-close" type="button"></button>
+      <button aria-label="Close" class="popup__close-button popup__close-button_type_add" type="button"></button>
       <h2 class="popup__heading">Новое место</h2>
-      <form name="popup-edit-form" class="popup__form popup__form_add">
+      <form name="popup-add-form" class="popup__form popup__form_add">
 
         <input class="popup__input popup__input_value_title" name="title" placeholder="Название" type="text">
 
@@ -67,10 +67,18 @@
     </div>
   </div>
 
+  <div class="popup popup_photo">
+    <figure class="popup__figure">
+      <button class="popup__close-button popup__close-button_type_photo"></button>
+      <img class="popup__image" src="" alt="">
+      <figcaption class="popup__caption"></figcaption>
+    </figure>
+  </div>
+
   <template class="template-element">
     <article class="element">
       <button class="element__delete-button"></button>
-      <img alt="" class="element__image" src="">
+      <img class="element__image" alt=""  src="">
       <div class="element__info">
         <h2 class="element__title"></h2>
         <button class="element__like-button" type="button"></button>
