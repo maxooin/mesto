@@ -1,6 +1,6 @@
-// переменные
+//Импортиреум массив
 import {initialCards} from './cards.js';
-
+// переменные
 const popupAdd = document.querySelector('.popup_add-form');
 const addButton = document.querySelector('.profile__add-button');
 const addCloseButton = document.querySelector('.popup__close-button_type_add');
@@ -57,7 +57,6 @@ function handleFormSubmit(evt) {
 
   closePopup(popupEdit);
 }
-
 //Функция добавления нового элемента
 function handleAddElement(evt) {
   evt.preventDefault();
@@ -67,9 +66,14 @@ function handleAddElement(evt) {
   closePopup(popupAdd);
   addForm.reset();
 }
+//Функция для октрытия Popup Картинки.
+function handleShowPhoto (image, caption) {
+  openPopup(popupPhoto);
 
-
-
+  popupImage.src = image;
+  popupImage.alt = caption;
+  popupCaption.textContent = caption;
+}
 // Функция создания элемента и вставления из шаблона
 function createElement(item) {
   const templateElement = document.querySelector('.template-element').content;
@@ -97,16 +101,7 @@ function renderList() {
   elementsSection.append(...result);
 }
 
-function handleShowPhoto (image, caption) {
-  openPopup(popupPhoto);
-
-  popupImage.src = image;
-  popupImage.alt = caption;
-  popupCaption.textContent = caption;
-}
-
 renderList();
-
 //Слушатели на кнопках и формах
 addButton.addEventListener('click', () => openPopup(popupAdd));
 addCloseButton.addEventListener('click', () => closePopup(popupAdd));
