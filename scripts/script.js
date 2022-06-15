@@ -1,4 +1,4 @@
-//Импортиреум массив
+//Импортируем массив
 import {initialCards} from './cards.js';
 // переменные
 const popupAdd = document.querySelector('.popup_add-form');
