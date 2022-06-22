@@ -40,8 +40,8 @@ function closePopup(popup) {
 
 //Функция закрытия Popup'оф по кнопке Esc
 function handleEscClose(evt) {
-  const popup = document.querySelector('.popup_opened')
   if (evt.key === "Escape") {
+    const popup = document.querySelector('.popup_opened')
     closePopup(popup);
   }
 }
