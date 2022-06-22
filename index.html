@@ -40,11 +40,13 @@
     <div class="popup__container">
       <button aria-label="Close" class="popup__close-button popup__close-button_type_edit" type="button"></button>
       <h2 class="popup__heading">Редактировать профиль</h2>
-      <form name="popup-edit-form" class="popup__form popup__form_edit">
+      <form name="popup-edit-form" class="popup__form popup__form_edit" novalidate>
 
-        <input class="popup__input popup__input_value_name" name="name" placeholder="Имя" type="text" required>
+        <input class="popup__input popup__input_value_name" name="name" placeholder="Имя" type="text" minlength="2"
+               maxlength="40" required>
 
-        <input class="popup__input popup__input_value_job" name="job" placeholder="О себе" type="text" required>
+        <input class="popup__input popup__input_value_job" name="job" placeholder="О себе" type="text" minlength="2"
+               maxlength="200" required>
 
         <button aria-label="Submit" class="popup__submit-button" type="submit">Сохранить</button>
       </form>
@@ -55,9 +57,10 @@
     <div class="popup__container">
       <button aria-label="Close" class="popup__close-button popup__close-button_type_add" type="button"></button>
       <h2 class="popup__heading">Новое место</h2>
-      <form name="popup-add-form" class="popup__form popup__form_add">
+      <form name="popup-add-form" class="popup__form popup__form_add" novalidate>
 
-        <input class="popup__input popup__input_value_title" name="title" placeholder="Название" type="text" required>
+        <input class="popup__input popup__input_value_title" name="title" placeholder="Название" type="text"
+               minlength="2" maxlength="30" required>
 
         <input class="popup__input popup__input_value_url" name="url" placeholder="Ссылка" type="url" required>
 
@@ -77,7 +80,7 @@
   <template class="template-element">
     <article class="element">
       <button class="element__delete-button"></button>
-      <img class="element__image"  src="#" alt="">
+      <img class="element__image" src="#" alt="">
       <div class="element__info">
         <h2 class="element__title"></h2>
         <button class="element__like-button" type="button"></button>
@@ -86,5 +89,6 @@
   </template>
 
   <script src="scripts/script.js" type="module"></script>
+  <script src="scripts/validate.js"></script>
 </body>
 </html>

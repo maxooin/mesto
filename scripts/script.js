@@ -29,19 +29,33 @@ const elementsSection = document.querySelector('.elements');
 //Общая функция для открытия Popup'оф
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', handleEscClose);
 }
+
 //Общая функция для закрытия Popup'оф
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleEscClose);
 }
+
+//Функция закрытия Popup'оф по кнопке Esc
+function handleEscClose(evt) {
+  const popup = document.querySelector('.popup_opened')
+  if (evt.key === "Escape") {
+    closePopup(popup);
+  }
+}
+
 //Функция удаления карточки
 function handleDeleteElement(evt) {
   evt.target.closest('.element').remove();
 }
+
 //Функция постановки лайка
 function handleLikeElement(evt) {
   evt.target.classList.toggle('element__like-button_active');
 }
+
 // Функция для открытия popupEdit
 function openEdit() {
   openPopup(popupEdit);
@@ -49,6 +63,7 @@ function openEdit() {
   nameInput.value = userName.textContent;
   jobInput.value = userJob.textContent;
 }
+
 // Функция сохранения Имени и работы
 function handleFormSubmit(evt) {
   evt.preventDefault();
@@ -58,11 +73,13 @@ function handleFormSubmit(evt) {
 
   closePopup(popupEdit);
 }
+
 // Добавление element в html
-function prependToSection (title, link) {
-  const newElement = createElement({name:title, link:link});
+function prependToSection(title, link) {
+  const newElement = createElement({name: title, link: link});
   elementsSection.prepend(newElement);
 }
+
 //Функция добавления нового элемента
 function handleAddElement(evt) {
   evt.preventDefault();
@@ -72,8 +89,9 @@ function handleAddElement(evt) {
   closePopup(popupAdd);
   addForm.reset();
 }
+
 //Функция для октрытия Popup Картинки.
-function handleShowPhoto (image, caption) {
+function handleShowPhoto(image, caption) {
 
   popupImage.src = image;
   popupImage.alt = caption;
@@ -81,6 +99,7 @@ function handleShowPhoto (image, caption) {
 
   openPopup(popupPhoto);
 }
+
 // Функция создания элемента и вставления из шаблона
 function createElement(item) {
   const element = templateElement.querySelector('.element').cloneNode(true);
@@ -99,10 +118,11 @@ function createElement(item) {
 
   return element;
 }
+
 //Функция отрисовки элемента
 function renderList() {
   initialCards.forEach(item =>
-  prependToSection(item.name, item.link));
+    prependToSection(item.name, item.link));
 }
 
 renderList();
