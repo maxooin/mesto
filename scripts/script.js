@@ -30,18 +30,28 @@ const elementsSection = document.querySelector('.elements');
 function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', handleEscClose);
+  document.addEventListener('click', handleClickClose);
 }
 
 //Общая функция для закрытия Popup'оф
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', handleEscClose);
+  document.removeEventListener('click', handleClickClose);
 }
 
 //Функция закрытия Popup'оф по кнопке Esc
 function handleEscClose(evt) {
   if (evt.key === "Escape") {
     const popup = document.querySelector('.popup_opened')
+    closePopup(popup);
+  }
+}
+
+//Функция закрытия Popup'оф по клику на overlay
+function handleClickClose(evt) {
+  if (evt.target.classList.contains('popup')) {
+    const popup = document.querySelector('.popup_opened');
     closePopup(popup);
   }
 }
