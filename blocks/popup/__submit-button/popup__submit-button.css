@@ -7,7 +7,7 @@
   color: white;
   transition: opacity 0.5s;
   cursor: pointer;
-  margin: 48px 36px 37px;
+  margin: 30px 36px 37px;
   font-family: 'Inter', 'Arial', sans-serif;
   font-size: 18px;
   font-weight: 400;
@@ -23,7 +23,7 @@
   .popup__submit-button {
     width: 238px;
     height: 46px;
-    margin: 45px 22px 25px;
+    margin: 20px 22px 25px;
     font-size: 14px;
   }
 }
