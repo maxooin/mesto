@@ -24,7 +24,7 @@ const photoCloseButton = document.querySelector('.popup__close-button_type_photo
 
 const templateElement = document.querySelector('.template-element').content;
 const elementsSection = document.querySelector('.elements');
-
+const popupSubmitButton = document.querySelector('.popup__submit-button');
 
 //Общая функция для открытия Popup'оф
 function openPopup(popup) {
@@ -38,6 +38,28 @@ function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', handleEscClose);
   document.removeEventListener('click', handleClickClose);
+}
+
+//Функция сброса ошибок формы
+function resetForm() {
+  const formVisible = document.querySelector('.popup_opened');
+  const inputErrorList = Array.from(formVisible.querySelectorAll('.popup__input'));
+  const spanErrorList = Array.from(formVisible.querySelectorAll('.popup__error'));
+  inputErrorList.forEach(function (inputItem) {
+    inputItem.classList.remove('popup__input_type_error');
+  })
+  spanErrorList.forEach(function (spanItem) {
+    spanItem.classList.remove('popup__error_visible');
+  })
+  if (formVisible.classList.contains('popup_add-form')) {
+    inputErrorList.forEach(function (inputItem) {
+      inputItem.value = "";
+    })
+    popupSubmitButton.classList.add('popup__submit-button_disabled');
+  }
+  if (formVisible.classList.contains('popup_edit-form')) {
+    popupSubmitButton.classList.remove('popup__submit-button_disabled');
+  }
 }
 
 //Функция закрытия Popup'оф по кнопке Esc
@@ -69,9 +91,16 @@ function handleLikeElement(evt) {
 // Функция для открытия popupEdit
 function openEdit() {
   openPopup(popupEdit);
-
+  resetForm();
   nameInput.value = userName.textContent;
   jobInput.value = userJob.textContent;
+}
+
+//Функция открытия popupAdd
+function openAdd() {
+  addForm.reset();
+  openPopup(popupAdd);
+  resetForm();
 }
 
 // Функция сохранения Имени и работы
@@ -137,7 +166,7 @@ function renderList() {
 
 renderList();
 //Слушатели на кнопках и формах
-addButton.addEventListener('click', () => openPopup(popupAdd));
+addButton.addEventListener('click', openAdd);
 addCloseButton.addEventListener('click', () => closePopup(popupAdd));
 addForm.addEventListener('submit', handleAddElement);
 popupOpenEdit.addEventListener('click', openEdit);
