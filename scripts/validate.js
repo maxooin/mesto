@@ -46,8 +46,10 @@ const enableValidation = (property) => {
 //Функция включения/выключения кнопки
 const toggleButtonState = (inputList, buttonElement, property) => {
   if (hasInvalidInput(inputList)) {
+    buttonElement.setAttribute('disabled', '');
     buttonElement.classList.add(property.inactiveButtonClass);
   } else {
+    buttonElement.removeAttribute('disabled');
     buttonElement.classList.remove(property.inactiveButtonClass);
   }
 }
@@ -57,6 +59,15 @@ const hasInvalidInput = (inputList) => {
     return !inputElement.validity.valid;
   })
 };
+
+//Функция для сбороса ошибок в формах
+const resetFormError = (property, popup) => {
+  const formElement = popup.querySelector(property.formSelector)
+  const inputList = Array.from(formElement.querySelectorAll(property.inputSelector));
+  const buttonElement = formElement.querySelector(property.submitButtonSelector);
+  inputList.forEach(inputElement => hideInputError(formElement, inputElement, property))
+  toggleButtonState(inputList, buttonElement, property)
+}
 
 enableValidation({
   formSelector: '.popup__form',

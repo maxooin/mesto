@@ -1,5 +1,14 @@
 //Импортируем массив
 import {initialCards} from './cards.js';
+//Объет настроек для функции resetFormError
+const validSetting = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__submit-button',
+  inactiveButtonClass: 'popup__submit-button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
 // переменные
 const popupAdd = document.querySelector('.popup_add-form');
 const addButton = document.querySelector('.profile__add-button');
@@ -24,7 +33,6 @@ const photoCloseButton = document.querySelector('.popup__close-button_type_photo
 
 const templateElement = document.querySelector('.template-element').content;
 const elementsSection = document.querySelector('.elements');
-const popupSubmitButton = document.querySelector('.popup__submit-button');
 
 //Общая функция для открытия Popup'оф
 function openPopup(popup) {
@@ -40,28 +48,6 @@ function closePopup(popup) {
   document.removeEventListener('click', handleClickClose);
 }
 
-//Функция сброса ошибок формы
-function resetForm() {
-  const formVisible = document.querySelector('.popup_opened');
-  const inputErrorList = Array.from(formVisible.querySelectorAll('.popup__input'));
-  const spanErrorList = Array.from(formVisible.querySelectorAll('.popup__error'));
-  inputErrorList.forEach(function (inputItem) {
-    inputItem.classList.remove('popup__input_type_error');
-  })
-  spanErrorList.forEach(function (spanItem) {
-    spanItem.classList.remove('popup__error_visible');
-  })
-  if (formVisible.classList.contains('popup_add-form')) {
-    inputErrorList.forEach(function (inputItem) {
-      inputItem.value = "";
-    })
-    popupSubmitButton.classList.add('popup__submit-button_disabled');
-  }
-  if (formVisible.classList.contains('popup_edit-form')) {
-    popupSubmitButton.classList.remove('popup__submit-button_disabled');
-  }
-}
-
 //Функция закрытия Popup'оф по кнопке Esc
 function handleEscClose(evt) {
   if (evt.key === "Escape") {
@@ -73,8 +59,7 @@ function handleEscClose(evt) {
 //Функция закрытия Popup'оф по клику на overlay
 function handleClickClose(evt) {
   if (evt.target.classList.contains('popup')) {
-    const popup = document.querySelector('.popup_opened');
-    closePopup(popup);
+    closePopup(evt.target);
   }
 }
 
@@ -90,17 +75,18 @@ function handleLikeElement(evt) {
 
 // Функция для открытия popupEdit
 function openEdit() {
-  openPopup(popupEdit);
-  resetForm();
   nameInput.value = userName.textContent;
   jobInput.value = userJob.textContent;
+  openPopup(popupEdit);
+  resetFormError(validSetting, popupEdit);
+
 }
 
 //Функция открытия popupAdd
 function openAdd() {
   addForm.reset();
   openPopup(popupAdd);
-  resetForm();
+  resetFormError(validSetting, popupAdd);
 }
 
 // Функция сохранения Имени и работы
