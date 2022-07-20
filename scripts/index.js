@@ -1,6 +1,9 @@
-//Импортируем массив
+//Импортируем данные
 import {initialCards} from './cards.js';
-//Объет настроек для функции resetFormError
+import {Card} from './Card.js';
+import {FormValidator} from './FormValidator.js';
+
+//Объект настроек для функции resetFormError
 const validSetting = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -31,8 +34,8 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 const photoCloseButton = document.querySelector('.popup__close-button_type_photo');
 
-const templateElement = document.querySelector('.template-element').content;
 const elementsSection = document.querySelector('.elements');
+
 
 //Общая функция для открытия Popup'оф
 function openPopup(popup) {
@@ -63,30 +66,19 @@ function handleClickClose(evt) {
   }
 }
 
-//Функция удаления карточки
-function handleDeleteElement(evt) {
-  evt.target.closest('.element').remove();
-}
-
-//Функция постановки лайка
-function handleLikeElement(evt) {
-  evt.target.classList.toggle('element__like-button_active');
-}
-
 // Функция для открытия popupEdit
 function openEdit() {
   nameInput.value = userName.textContent;
   jobInput.value = userJob.textContent;
   openPopup(popupEdit);
-  resetFormError(validSetting, popupEdit);
-
+  popupEditValid.resetFormError();
 }
 
 //Функция открытия popupAdd
 function openAdd() {
   addForm.reset();
   openPopup(popupAdd);
-  resetFormError(validSetting, popupAdd);
+  popupAddValid.resetFormError();
 }
 
 // Функция сохранения Имени и работы
@@ -99,24 +91,20 @@ function handleFormSubmit(evt) {
   closePopup(popupEdit);
 }
 
-// Добавление element в html
-function prependToSection(title, link) {
-  const newElement = createElement({name: title, link: link});
-  elementsSection.prepend(newElement);
-}
-
 //Функция добавления нового элемента
 function handleAddElement(evt) {
   evt.preventDefault();
 
-  prependToSection(titleInput.value, urlInput.value);
+  const element = new Card(titleInput.value, urlInput.value, '.template-element');
+  const newElement = element.generateCard();
+  elementsSection.prepend(newElement);
 
   closePopup(popupAdd);
   addForm.reset();
 }
 
 //Функция для октрытия Popup Картинки.
-function handleShowPhoto(image, caption) {
+export function handleShowPhoto(image, caption) {
 
   popupImage.src = image;
   popupImage.alt = caption;
@@ -125,32 +113,18 @@ function handleShowPhoto(image, caption) {
   openPopup(popupPhoto);
 }
 
-// Функция создания элемента и вставления из шаблона
-function createElement(item) {
-  const element = templateElement.querySelector('.element').cloneNode(true);
-  const elementImage = element.querySelector('.element__image');
-  const elementTitle = element.querySelector('.element__title');
-  const elementLike = element.querySelector('.element__like-button');
-  const elementDelete = element.querySelector('.element__delete-button');
+const popupEditValid = new FormValidator(validSetting, popupEdit);
+popupEditValid.enableValidation();
 
-  elementImage.src = item.link;
-  elementImage.alt = item.name;
-  elementTitle.textContent = item.name;
+const popupAddValid = new FormValidator(validSetting, popupAdd);
+popupAddValid.enableValidation();
 
-  elementLike.addEventListener('click', handleLikeElement);
-  elementDelete.addEventListener('click', handleDeleteElement);
-  elementImage.addEventListener('click', () => handleShowPhoto(item.link, item.name));
+initialCards.forEach((item) => {
+  const initialCard = new Card(item.name, item.link, ".template-element");
+  const initialCardElement = initialCard.generateCard();
+  elementsSection.prepend(initialCardElement);
+});
 
-  return element;
-}
-
-//Функция отрисовки элемента
-function renderList() {
-  initialCards.forEach(item =>
-    prependToSection(item.name, item.link));
-}
-
-renderList();
 //Слушатели на кнопках и формах
 addButton.addEventListener('click', openAdd);
 addCloseButton.addEventListener('click', () => closePopup(popupAdd));
