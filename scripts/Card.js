@@ -21,10 +21,6 @@ export class Card {
     this._like.classList.toggle("element__like-button_active");
   }
 
-  /*_handleShowPhoto() {
-    handleShowPhoto(this._link, this._title);
-  }*/
-
   _setEventListener() {
     this._delete.addEventListener("click", () => {
       this._handleDeleteElement();
@@ -33,10 +29,6 @@ export class Card {
     this._like.addEventListener("click", () => {
       this._handleLikeElement();
     });
-
-    // this._image.addEventListener("click", () => {
-    //   this._handleShowPhoto();
-    // });
 
     this._image.addEventListener("click", () => {
       this._handleShowPhoto(this._title, this._link);

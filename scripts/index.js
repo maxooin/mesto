@@ -15,14 +15,12 @@ const validSetting = {
 // переменные
 const popupAdd = document.querySelector('.popup_add-form');
 const addButton = document.querySelector('.profile__add-button');
-// const addCloseButton = document.querySelector('.popup__close-button_type_add');
 const addForm = document.querySelector('.popup__form_add');
 const titleInput = addForm.querySelector('.popup__input_value_title');
 const urlInput = addForm.querySelector('.popup__input_value_url');
 
 const popupEdit = document.querySelector('.popup_edit-form');
 const popupOpenEdit = document.querySelector('.profile__edit-button');
-// const popupCloseButton = document.querySelector('.popup__close-button_type_edit');
 const formEdit = document.querySelector('.popup__form_edit');
 const nameInput = formEdit.querySelector('.popup__input_value_name');
 const jobInput = formEdit.querySelector('.popup__input_value_job');
@@ -32,7 +30,6 @@ const userJob = document.querySelector('.profile__job');
 const popupPhoto = document.querySelector('.popup_photo');
 const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
-// const photoCloseButton = document.querySelector('.popup__close-button_type_photo');
 
 const closeButtons = document.querySelectorAll('.popup__close-button');
 const elementsSection = document.querySelector('.elements');
@@ -88,7 +85,12 @@ closeButtons.forEach((button) => {
 });
 
 function createElement(item) {
-  const element = new Card(item.title, item.link, '.template-element');
+  const element = new Card(
+    item.name,
+    item.link,
+    ".template-element",
+    handleShowPhoto
+  );
   return element.generateCard();
 }
 
@@ -132,12 +134,10 @@ popupEditValid.enableValidation();
 const popupAddValid = new FormValidator(validSetting, popupAdd);
 popupAddValid.enableValidation();
 
-function renderList() {
-  initialCards.forEach((item) =>
-    prependToSection(item.name, item.link));
-}
+initialCards.forEach((item) => {
+  prependToSection(item.name, item.link);
+});
 
-renderList();
 //Слушатели на кнопках и формах
 addButton.addEventListener('click', openAdd);
 addForm.addEventListener('submit', handleAddElement);
