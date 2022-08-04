@@ -1,7 +1,13 @@
+import './index.css'
+
 //Импортируем данные
 import {initialCards} from '../components/cards.js';
 import {Card} from '../components/Card.js';
 import {FormValidator} from '../components/FormValidator.js';
+import Section from "../components/Section.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+import UserInfo from "../components/UserInfo.js";
 
 //Объект настроек для функции resetFormError
 const validSetting = {
@@ -15,73 +21,39 @@ const validSetting = {
 // переменные
 const popupAdd = document.querySelector('.popup_add-form');
 const addButton = document.querySelector('.profile__add-button');
-const addForm = document.querySelector('.popup__form_add');
-const titleInput = addForm.querySelector('.popup__input_value_title');
-const urlInput = addForm.querySelector('.popup__input_value_url');
 
 const popupEdit = document.querySelector('.popup_edit-form');
-const popupOpenEdit = document.querySelector('.profile__edit-button');
+const editButton = document.querySelector('.profile__edit-button');
 const formEdit = document.querySelector('.popup__form_edit');
 const nameInput = formEdit.querySelector('.popup__input_value_name');
 const jobInput = formEdit.querySelector('.popup__input_value_job');
-const userName = document.querySelector('.profile__name');
-const userJob = document.querySelector('.profile__job');
 
-const popupPhoto = document.querySelector('.popup_photo');
-const popupImage = document.querySelector('.popup__image');
-const popupCaption = document.querySelector('.popup__caption');
+const popupEditValid = new FormValidator(validSetting, popupEdit);
+popupEditValid.enableValidation();
 
-const closeButtons = document.querySelectorAll('.popup__close-button');
-const elementsSection = document.querySelector('.elements');
+const popupAddValid = new FormValidator(validSetting, popupAdd);
+popupAddValid.enableValidation();
 
+const section = new Section({items: initialCards, renderer: createElement}, ".elements");
 
-//Общая функция для открытия Popup'оф
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', handleEscClose);
-  document.addEventListener('click', handleClickClose);
-}
+const popupPicture = new PopupWithImage(".popup_photo");
+const popupAddForm = new PopupWithForm(".popup_add-form", handleAddElement);
 
-//Общая функция для закрытия Popup'оф
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', handleEscClose);
-  document.removeEventListener('click', handleClickClose);
-}
+const userProfile = new UserInfo({userNameSelector: ".profile__name", jobSelector: ".profile__job"});
 
-//Функция закрытия Popup'оф по кнопке Esc
-function handleEscClose(evt) {
-  if (evt.key === "Escape") {
-    const popup = document.querySelector('.popup_opened')
-    closePopup(popup);
-  }
-}
+const popupProfileEdit = new PopupWithForm(".popup_edit-form", handleEditSubmit);
 
-//Функция закрытия Popup'оф по клику на overlay
-function handleClickClose(evt) {
-  if (evt.target.classList.contains('popup')) {
-    closePopup(evt.target);
-  }
-}
-
-// Функция для открытия popupEdit
-function openEdit() {
-  nameInput.value = userName.textContent;
-  jobInput.value = userJob.textContent;
-  openPopup(popupEdit);
+editButton.addEventListener("click", () => {
+  const {name, job} = userProfile.getUserInfo();
+  nameInput.value = name;
+  jobInput.value = job;
+  popupProfileEdit.open();
   popupEditValid.resetFormError();
-}
+});
 
-//Функция открытия popupAdd
-function openAdd() {
-  addForm.reset();
-  openPopup(popupAdd);
+addButton.addEventListener("click", () => {
   popupAddValid.resetFormError();
-}
-
-closeButtons.forEach((button) => {
-  const popup = button.closest('.popup');
-  button.addEventListener('click', () => closePopup(popup));
+  popupAddForm.open();
 });
 
 function createElement(item) {
@@ -94,52 +66,30 @@ function createElement(item) {
   return element.generateCard();
 }
 
-function prependToSection(title, link) {
-  const newElement = createElement({name: title, link: link})
-  elementsSection.prepend(newElement)
-}
-
 // Функция сохранения Имени и работы
-function handleFormSubmit(evt) {
-  evt.preventDefault();
-
-  userName.textContent = nameInput.value;
-  userJob.textContent = jobInput.value;
-
-  closePopup(popupEdit);
+function handleEditSubmit(item) {
+  const {name, job} = item;
+  userProfile.setUserInfo(name, job);
+  popupProfileEdit.close();
 }
 
 //Функция добавления нового элемента
-function handleAddElement(evt) {
-  evt.preventDefault();
-
-  prependToSection(titleInput.value, urlInput.value);
-  closePopup(popupAdd);
-  addForm.reset();
+function handleAddElement(item) {
+  const element = createElement(
+    {name: item.title, link: item.url},
+    ".elements"
+  );
+  section.addItem(element);
+  popupAddForm.close();
 }
 
 //Функция для октрытия Popup Картинки.
 function handleShowPhoto(caption, image) {
-
-  popupImage.src = image;
-  popupImage.alt = caption;
-  popupCaption.textContent = caption;
-
-  openPopup(popupPhoto);
+  popupPicture.open(caption, image);
 }
 
-const popupEditValid = new FormValidator(validSetting, popupEdit);
-popupEditValid.enableValidation();
+popupPicture.setEventListeners();
+popupAddForm.setEventListeners();
+popupProfileEdit.setEventListeners();
 
-const popupAddValid = new FormValidator(validSetting, popupAdd);
-popupAddValid.enableValidation();
-
-initialCards.forEach((item) => {
-  prependToSection(item.name, item.link);
-});
-
-//Слушатели на кнопках и формах
-addButton.addEventListener('click', openAdd);
-addForm.addEventListener('submit', handleAddElement);
-popupOpenEdit.addEventListener('click', openEdit);
-formEdit.addEventListener('submit', handleFormSubmit);
+section.renderItems();
