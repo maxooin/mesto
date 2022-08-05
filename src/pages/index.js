@@ -1,7 +1,8 @@
 import './index.css'
 
 //Импортируем данные
-import {initialCards} from '../components/cards.js';
+import {initialCards} from '../utils/cards.js';
+import {validSetting} from "../utils/constants";
 import {Card} from '../components/Card.js';
 import {FormValidator} from '../components/FormValidator.js';
 import Section from "../components/Section.js";
@@ -9,15 +10,6 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 
-//Объект настроек для функции resetFormError
-const validSetting = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__submit-button',
-  inactiveButtonClass: 'popup__submit-button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-};
 // переменные
 const popupAdd = document.querySelector('.popup_add-form');
 const addButton = document.querySelector('.profile__add-button');
