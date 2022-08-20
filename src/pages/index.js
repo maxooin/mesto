@@ -9,16 +9,7 @@ import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
-
-// переменные
-const popupAdd = document.querySelector('.popup_add-form');
-const addButton = document.querySelector('.profile__add-button');
-
-const popupEdit = document.querySelector('.popup_edit-form');
-const editButton = document.querySelector('.profile__edit-button');
-const formEdit = document.querySelector('.popup__form_edit');
-const nameInput = formEdit.querySelector('.popup__input_value_name');
-const jobInput = formEdit.querySelector('.popup__input_value_job');
+import {popupAdd, addButton, popupEdit, editButton, nameInput, jobInput} from '../utils/constants.js';
 
 const popupEditValid = new FormValidator(validSetting, popupEdit);
 popupEditValid.enableValidation();
