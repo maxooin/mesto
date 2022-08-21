@@ -1,9 +1,16 @@
 export class Card {
-  constructor(title, link, cardSelector, handleShowPhoto) {
+  constructor(title, link, cardSelector, handleShowPhoto, item, myId, handleElementDelete) {
     this._title = title;
     this._link = link;
     this._cardSelector = cardSelector;
     this._handleShowPhoto = handleShowPhoto;
+    this._handleDeleteElement = handleElementDelete
+    this._item = item;
+    this._id = item._id;
+    this._ownerId = item.owner._id;
+    this._myId = myId;
+    this._likes = item.likes
+
   }
 
   _getTemplate() {
@@ -13,7 +20,23 @@ export class Card {
       .cloneNode(true);
   }
 
-  _handleDeleteElement() {
+  getId() {
+    return this._id
+  }
+
+  _checkLikes() {
+    this._likes.forEach(like => {
+      if (like._id === this._myId) {
+        this._element.querySelector('.element__like-button').classList.add('element__like-button_active');
+      }
+    });
+  }
+
+  countLikes(data) {
+    this._element.querySelector('.element__like-count').textContent = data.likes.length;
+  }
+
+  deleteElement() {
     this._element.closest(".element").remove();
   }
 
@@ -22,9 +45,12 @@ export class Card {
   }
 
   _setEventListener() {
-    this._delete.addEventListener("click", () => {
-      this._handleDeleteElement();
-    });
+
+    if (this._ownerId === this._myId) {
+      this._delete.addEventListener("click", () => {
+        this._handleDeleteElement();
+      });
+    }
 
     this._like.addEventListener("click", () => {
       this._handleLikeElement();
@@ -38,10 +64,14 @@ export class Card {
   generateCard() {
     this._element = this._getTemplate();
     this._like = this._element.querySelector(".element__like-button");
-    this._delete = this._element.querySelector(".element__delete-button");
+    if (this._ownerId === this._myId) {
+      this._delete = this._element.querySelector(".element__delete-button");
+    }
     this._image = this._element.querySelector(".element__image");
 
     this._setEventListener();
+    this.countLikes(this._item);
+    this._checkLikes();
 
     this._element.querySelector(".element__image").src = this._link;
     this._element.querySelector(".element__image").alt = this._title;
