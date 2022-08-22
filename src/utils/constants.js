@@ -23,4 +23,5 @@ export const editButton = document.querySelector('.profile__edit-button');
 const formEdit = document.querySelector('.popup__form_edit');
 export const nameInput = formEdit.querySelector('.popup__input_value_name');
 export const jobInput = formEdit.querySelector('.popup__input_value_job');
-
+export const popupAvatar = document.querySelector('.popup_avatar')
+export const editAvatar = document.querySelector('.profile__avatar')
