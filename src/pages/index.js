@@ -109,9 +109,19 @@ function createElement(item) {
 
 // Функция сохранения Имени и работы
 function handleEditSubmit(item) {
-  const {name, job} = item;
-  userProfile.setUserInfo(name, job);
-  popupProfileEdit.close();
+  popupProfileEdit.alertLoading(true, 'Save');
+  api.setUserInfo(item.user, item.job)
+    .then(res => {
+      userProfile.setUserInfo(res);
+      popupProfileEdit.close();
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
+      popupProfileEdit.alertLoading(false, 'Save');
+    })
+
 }
 
 //Функция добавления нового элемента
