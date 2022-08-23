@@ -1,15 +1,15 @@
 export class Card {
-  constructor(title, link, cardSelector, handleShowPhoto, item, myId, handleElementDelete) {
+  constructor(title, link, cardSelector, handleShowPhoto, myId, handleElementDelete) {
     this._title = title;
     this._link = link;
     this._cardSelector = cardSelector;
     this._handleShowPhoto = handleShowPhoto;
     this._handleDeleteElement = handleElementDelete
-    this._item = item;
-    this._id = item._id;
-    this._ownerId = item.owner._id;
+    // this._item = item;
+    // this._id = item._id;
+    // this._ownerId = item.owner._id;
     this._myId = myId;
-    this._likes = item.likes
+    // this._likes = item.likes
 
   }
 

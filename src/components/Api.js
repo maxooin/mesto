@@ -5,34 +5,35 @@ export default class Api {
   }
 
   _checkResponse(res) {
+    console.log(res)
     if (res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getUserInfo() {
-    return fetch(`${this._url}/users/me`, {
-      method: 'GET',
+  getUserInfoApi() {
+    return fetch(`${this._url}users/me`, {
+      method: "GET",
       headers: this._headers
     })
       .then(this._checkResponse);
   }
 
   getInitialCards() {
-    return fetch(`${this._url}/cards`, {
-      method: 'GET',
+    return fetch(`${this._url}cards`, {
+      method: "GET",
       headers: this._headers
     })
       .then(this._checkResponse);
   }
 
-  setUserInfo(user, job) {
-    return fetch(`${this._url}/users/me`, {
+  setUserInfoApi(name, job) {
+    return fetch(`${this._url}users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        name: user,
+        name: name,
         about: job
       })
     })
@@ -40,7 +41,7 @@ export default class Api {
   }
 
   addNewElement(title, url) {
-    return fetch(`${this._url}/cards`, {
+    return fetch(`${this._url}cards`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
@@ -52,7 +53,7 @@ export default class Api {
   }
 
   like(id, isLike) {
-    return fetch(`${this._url}/cards/likes/${id}`, {
+    return fetch(`${this._url}cards/likes/${id}`, {
       method: isLike ? 'PUT' : 'DELETE',
       headers: this._headers
     })
@@ -60,7 +61,7 @@ export default class Api {
   }
 
   deleteElement(id) {
-    return fetch(`${this._url}/cards/${id}`, {
+    return fetch(`${this._url}cards/${id}`, {
       method: 'DELETE',
       headers: this._headers
     })
@@ -68,7 +69,7 @@ export default class Api {
   }
 
   changeAvatar(avatar) {
-    return fetch(`${this._url}/users/me/avatar`, {
+    return fetch(`${this._url}users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({

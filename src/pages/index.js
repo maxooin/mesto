@@ -1,19 +1,18 @@
 import './index.css'
 
 //Импортируем данные
-import {initialCards} from '../utils/cards.js';
-import {validSetting} from "../utils/constants";
+// import {initialCards} from '../utils/cards.js';
+import {apiSetting, validSetting} from "../utils/constants";
 import {
-  popupAdd,
   addButton,
-  popupEdit,
+  editAvatar,
   editButton,
-  nameInput,
   jobInput,
+  nameInput,
+  popupAdd,
   popupAvatar,
-  editAvatar
+  popupEdit
 } from '../utils/constants.js';
-import {apiSetting} from "../utils/constants";
 import {Card} from '../components/Card.js';
 import {FormValidator} from '../components/FormValidator.js';
 import Section from "../components/Section.js";
@@ -43,6 +42,7 @@ const popupPicture = new PopupWithImage(".popup_photo");
 const popupAddForm = new PopupWithForm(".popup_add-form", handleAddElement);
 const popupDelete = new PopupDelete('.popup_delete', '.popup__form_delete');
 const popupEditAvatar = new PopupWithForm('.popup_avatar', handleChangeAvatar);
+const popupProfileEdit = new PopupWithForm(".popup_edit-form", handleEditSubmit);
 
 const userProfile = new UserInfo({
   userNameSelector: ".profile__name",
@@ -50,15 +50,13 @@ const userProfile = new UserInfo({
   userAvatarSelector: '.profile__photo'
 });
 
-const popupProfileEdit = new PopupWithForm(".popup_edit-form", handleEditSubmit);
-
-const getUserInfoPromise = api.getUserInfo();
+const getUserInfoPromise = api.getUserInfoApi();
 const getInitialCards = api.getInitialCards();
 
-getUserInfoPromise.then(res => {
-  myId = res._id;
-  userProfile.setUserInfo(res);
-})
+getUserInfoPromise
+  .then(res => {
+    userProfile.setUserInfo(res);
+  })
   .catch(err => {
     console.log(err)
   })
@@ -79,10 +77,16 @@ getInitialCards.then(res => {
     console.log(err)
   });
 
+Promise.all(([getUserInfoPromise, getInitialCards]))
+  .then(res => {
+    console.log(res);
+  })
+  .catch(err => {
+    console.log(err)
+  })
 editButton.addEventListener("click", () => {
-  const {name, job} = userProfile.getUserInfo();
-  nameInput.value = name;
-  jobInput.value = job;
+  nameInput.value = userProfile.getUserInfo().name;
+  jobInput.value = userProfile.getUserInfo().job;
   popupProfileEdit.open();
   popupEditValid.resetFormError();
 });
@@ -102,15 +106,27 @@ function createElement(item) {
     item.name,
     item.link,
     ".template-element",
-    handleShowPhoto
+    handleShowPhoto,
+    myId,
+    () => {
+      popupDelete.open(() =>
+        api.deleteElement(element.getId())
+          .then(() => {
+            element.deleteElement();
+            popupDelete.close()
+          })
+          .catch((err) => {
+            console.log(err);
+          }));
+    }
   );
   return element.generateCard();
 }
 
 // Функция сохранения Имени и работы
 function handleEditSubmit(item) {
-  popupProfileEdit.alertLoading(true, 'Save');
-  api.setUserInfo(item.user, item.job)
+  popupProfileEdit.alertLoading(true, 'Сохранить');
+  api.setUserInfoApi(item.name, item.job)
     .then(res => {
       userProfile.setUserInfo(res);
       popupProfileEdit.close();
@@ -119,7 +135,7 @@ function handleEditSubmit(item) {
       console.log(err)
     })
     .finally(() => {
-      popupProfileEdit.alertLoading(false, 'Save');
+      popupProfileEdit.alertLoading(false, 'Сохранить');
     })
 
 }
@@ -157,5 +173,6 @@ function handleChangeAvatar(item) {
 popupPicture.setEventListeners();
 popupAddForm.setEventListeners();
 popupProfileEdit.setEventListeners();
+popupEditAvatar.setEventListeners();
 
-section.renderItems();
+// section.renderItems();
