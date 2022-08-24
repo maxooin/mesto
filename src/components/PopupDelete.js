@@ -1,9 +1,9 @@
 import Popup from "./Popup.js";
 
 export default class PopupDelete extends Popup {
-  constructor(popupSelector, formSelector) {
+  constructor(popupSelector) {
     super(popupSelector);
-    this._form = document.querySelector(formSelector);
+    this._form = this._popup.querySelector('.popup__form_delete');
   }
 
   open(deleteElement) {
@@ -11,7 +11,7 @@ export default class PopupDelete extends Popup {
     this._deleteElement = deleteElement;
   }
 
-  _handleDeleteElement(evt) {
+  _handleDeleteElement = (evt) => {
     evt.preventDefault();
     this._deleteElement();
   }

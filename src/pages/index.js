@@ -37,7 +37,7 @@ popupAvatarValid.enableValidation()
 
 const popupPicture = new PopupWithImage(".popup_photo");
 const popupAddForm = new PopupWithForm(".popup_add-form", handleAddElement);
-const popupDelete = new PopupDelete('.popup_delete', '.popup__form_delete');
+const popupDelete = new PopupDelete('.popup_delete');
 const popupEditAvatar = new PopupWithForm('.popup_avatar', handleChangeAvatar);
 const popupProfileEdit = new PopupWithForm(".popup_edit-form", handleEditSubmit);
 
@@ -190,3 +190,4 @@ popupPicture.setEventListeners();
 popupAddForm.setEventListeners();
 popupProfileEdit.setEventListeners();
 popupEditAvatar.setEventListeners();
+popupDelete.setEventListeners();
