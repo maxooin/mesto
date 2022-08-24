@@ -1,81 +1,106 @@
-export class Card {
-  constructor(title, link, cardSelector, handleShowPhoto, myId, handleElementDelete) {
-    this._title = title;
-    this._link = link;
-    this._cardSelector = cardSelector;
-    this._handleShowPhoto = handleShowPhoto;
-    this._handleDeleteElement = handleElementDelete
-    // this._item = item;
-    // this._id = item._id;
-    // this._ownerId = item.owner._id;
+export default class Card {
+  constructor(
+    item,
+    selector,
+    handleOpenImage,
+    myId,
+    handleDeleteElement,
+    like,
+    dislike
+  ) {
+    this._item = item;
+    this._name = item.name;
+    this._link = item.link;
+    this._likes = item.likes;
+    this._id = item._id;
+    this._selector = selector;
+    this._handleOpenImage = handleOpenImage;
     this._myId = myId;
-    // this._likes = item.likes
-
+    this._ownerId = item.owner._id;
+    this._like = like;
+    this._dislike = dislike;
+    this._handleDeleteElement = handleDeleteElement;
   }
 
   _getTemplate() {
     return document
-      .querySelector(this._cardSelector)
+      .querySelector(this._selector)
       .content.querySelector(".element")
       .cloneNode(true);
   }
 
   getId() {
-    return this._id
+    return this._id;
+  }
+
+  likeElement() {
+    this._element
+      .querySelector(".element__like-button")
+      .classList.add("element__like-button_active");
+  }
+
+  disLikeElement() {
+    this._element
+      .querySelector(".element__like-button")
+      .classList.remove("element__like-button_active");
   }
 
   _checkLikes() {
-    this._likes.forEach(like => {
+    this._likes.forEach((like) => {
       if (like._id === this._myId) {
-        this._element.querySelector('.element__like-button').classList.add('element__like-button_active');
+        this._element
+          .querySelector(".element__like-button")
+          .classList.add("element__like-button_active");
       }
     });
   }
 
-  countLikes(data) {
-    this._element.querySelector('.element__like-count').textContent = data.likes.length;
+  countLikes(item) {
+    this._element.querySelector(".element__like-count").textContent =
+      item.likes.length;
   }
 
   deleteElement() {
     this._element.closest(".element").remove();
-  }
+  };
 
-  _handleLikeElement() {
-    this._like.classList.toggle("element__like-button_active");
-  }
-
-  _setEventListener() {
+  _setEventListeners() {
+    this._image.addEventListener("click", () => {
+      this._handleOpenImage(this._name, this._link);
+    });
 
     if (this._ownerId === this._myId) {
-      this._delete.addEventListener("click", () => {
+      this._element.querySelector(".element__delete-button").addEventListener("click", () => {
         this._handleDeleteElement();
       });
     }
 
-    this._like.addEventListener("click", () => {
-      this._handleLikeElement();
-    });
-
-    this._image.addEventListener("click", () => {
-      this._handleShowPhoto(this._title, this._link);
+    this._likeButton.addEventListener("click", () => {
+      if (this._likeButton.classList.contains("element__like-button_active")) {
+        this._dislike();
+      } else {
+        this._like();
+      }
     });
   }
 
-  generateCard() {
+  createElement() {
     this._element = this._getTemplate();
-    this._like = this._element.querySelector(".element__like-button");
-    if (this._ownerId === this._myId) {
-      this._delete = this._element.querySelector(".element__delete-button");
+
+    if (this._ownerId !== this._myId) {
+      this._element.querySelector(".element__delete-button").remove();
     }
+    this._likeButton = this._element.querySelector(".element__like-button");
     this._image = this._element.querySelector(".element__image");
 
-    this._setEventListener();
-    this.countLikes(this._item);
-    this._checkLikes();
 
     this._element.querySelector(".element__image").src = this._link;
-    this._element.querySelector(".element__image").alt = this._title;
-    this._element.querySelector(".element__title").textContent = this._title;
+    this._element.querySelector(".element__image").alt = this._name;
+    this._element.querySelector(".element__title").textContent = this._name;
+
+    this._setEventListeners();
+    this.countLikes(this._item);
+    this._checkLikes();
 
     return this._element;
   }

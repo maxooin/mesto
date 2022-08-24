@@ -1,7 +1,6 @@
 import './index.css'
 
 //Импортируем данные
-// import {initialCards} from '../utils/cards.js';
 import {apiSetting, validSetting} from "../utils/constants";
 import {
   addButton,
@@ -13,7 +12,6 @@ import {
   popupAvatar,
   popupEdit
 } from '../utils/constants.js';
-import {Card} from '../components/Card.js';
 import {FormValidator} from '../components/FormValidator.js';
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
@@ -21,9 +19,10 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import PopupDelete from "../components/PopupDelete.js";
 import Api from "../components/Api.js";
+import Card from "../components/Card.js";
 
 let myId;
-let cardList;
+let elementList;
 
 const api = new Api(apiSetting);
 
@@ -35,8 +34,6 @@ popupAddValid.enableValidation();
 
 const popupAvatarValid = new FormValidator(validSetting, popupAvatar);
 popupAvatarValid.enableValidation()
-
-// const section = new Section({items: initialCards, renderer: createElement}, ".elements");
 
 const popupPicture = new PopupWithImage(".popup_photo");
 const popupAddForm = new PopupWithForm(".popup_add-form", handleAddElement);
@@ -55,27 +52,62 @@ const getInitialCards = api.getInitialCards();
 
 getUserInfoPromise
   .then(res => {
+    myId = res._id;
     userProfile.setUserInfo(res);
   })
   .catch(err => {
     console.log(err)
   })
 
-getInitialCards.then(res => {
-  cardList = new Section({
-      items: res,
-      renderer: elementItem => {
-        const element = createElement(elementItem);
-        cardList.addItem(element)
+getInitialCards
+  .then(res => {
+    elementList = new Section({
+        items: res,
+        renderer: elementItem => {
+          const element = createElement(elementItem);
+          elementList.addItem(element);
+        },
       },
-    },
-    '.elements'
-  );
-  cardList.renderItems();
-})
+      '.elements'
+    );
+    elementList.renderItems();
+  })
   .catch(err => {
     console.log(err)
-  });
+  })
+
+function createElement(item) {
+  const element = new Card(item, '.template-element', handleShowPhoto, myId, () => {
+    popupDelete.open(() =>
+      api.deleteElement(element.getId())
+        .then(() => {
+          element.deleteElement();
+          popupDelete.close();
+        })
+        .catch((err) => {
+          console.log(err);
+        }));
+  }, () => {
+    api.like(element.getId())
+      .then((res) => {
+        element.likeElement();
+        element.countLikes(res);
+      })
+      .catch((err => {
+        console.log(err);
+      }))
+  }, () => {
+    api.dislike(element.getId())
+      .then((res) => {
+        element.disLikeElement();
+        element.countLikes(res)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  })
+  return element.createElement();
+}
 
 Promise.all(([getUserInfoPromise, getInitialCards]))
   .then(res => {
@@ -101,28 +133,6 @@ editAvatar.addEventListener('click', () => {
   popupEditAvatar.open()
 })
 
-function createElement(item) {
-  const element = new Card(
-    item.name,
-    item.link,
-    ".template-element",
-    handleShowPhoto,
-    myId,
-    () => {
-      popupDelete.open(() =>
-        api.deleteElement(element.getId())
-          .then(() => {
-            element.deleteElement();
-            popupDelete.close()
-          })
-          .catch((err) => {
-            console.log(err);
-          }));
-    }
-  );
-  return element.generateCard();
-}
-
 // Функция сохранения Имени и работы
 function handleEditSubmit(item) {
   popupProfileEdit.alertLoading(true, 'Сохранить');
@@ -142,17 +152,23 @@ function handleEditSubmit(item) {
 
 //Функция добавления нового элемента
 function handleAddElement(item) {
-  const element = createElement(
-    {name: item.title, link: item.url},
-    ".elements"
-  );
-  section.addItem(element);
-  popupAddForm.close();
+  popupAddForm.alertLoading(true, 'Сохранить');
+  api.addNewElement(item.title, item.url)
+    .then(res => {
+      elementList.addItem(createElement(res));
+      popupAddForm.close();
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
+      this.alertLoading(false, 'Сохранить');
+    })
 }
 
 //Функция для октрытия Popup Картинки.
-function handleShowPhoto(caption, image) {
-  popupPicture.open(caption, image);
+function handleShowPhoto(name, link) {
+  popupPicture.open(name, link);
 }
 
 function handleChangeAvatar(item) {
@@ -174,5 +190,3 @@ popupPicture.setEventListeners();
 popupAddForm.setEventListeners();
 popupProfileEdit.setEventListeners();
 popupEditAvatar.setEventListeners();
-
-// section.renderItems();

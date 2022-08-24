@@ -37,7 +37,7 @@ export default class Api {
         about: job
       })
     })
-      .then(this._checkResponse)
+      .then(this._checkResponse);
   }
 
   addNewElement(title, url) {
@@ -52,13 +52,22 @@ export default class Api {
       .then(this._checkResponse);
   }
 
-  like(id, isLike) {
+  like(id) {
     return fetch(`${this._url}cards/likes/${id}`, {
-      method: isLike ? 'PUT' : 'DELETE',
+      method: 'PUT',
       headers: this._headers
     })
       .then(this._checkResponse);
   }
+
+  dislike(id) {
+    return fetch(`${this._url}cards/likes/${id}`, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+      .then(this._checkResponse);
+  }
+
 
   deleteElement(id) {
     return fetch(`${this._url}cards/${id}`, {
