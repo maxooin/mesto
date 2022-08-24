@@ -157,7 +157,7 @@ function handleShowPhoto(caption, image) {
 
 function handleChangeAvatar(item) {
   popupEditAvatar.alertLoading(true, 'Сохранить');
-  api.changeAvatar(item.avatar)
+  api.changeAvatar(item)
     .then(res => {
       userProfile.setUserInfo(res);
       popupEditAvatar.close();
