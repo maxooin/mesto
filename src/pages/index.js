@@ -22,7 +22,8 @@ import Api from "../components/Api.js";
 import Card from "../components/Card.js";
 
 let myId;
-let elementList;
+
+const elementList = new Section({renderer: createElement}, '.elements');
 
 const api = new Api(apiSetting);
 
@@ -61,16 +62,7 @@ getUserInfoPromise
 
 getInitialCards
   .then(res => {
-    elementList = new Section({
-        items: res,
-        renderer: elementItem => {
-          const element = createElement(elementItem);
-          elementList.addItem(element);
-        },
-      },
-      '.elements'
-    );
-    elementList.renderItems();
+    elementList.renderItems(res);
   })
   .catch(err => {
     console.log(err)
@@ -117,8 +109,9 @@ Promise.all(([getUserInfoPromise, getInitialCards]))
     console.log(err)
   })
 editButton.addEventListener("click", () => {
-  nameInput.value = userProfile.getUserInfo().name;
-  jobInput.value = userProfile.getUserInfo().job;
+  const {name, job} = userProfile.getUserInfo();
+  nameInput.value = name;
+  jobInput.value = job;
   popupProfileEdit.open();
   popupEditValid.resetFormError();
 });

@@ -1,18 +1,18 @@
 export class FormValidator {
-  constructor(validSetting, formSelector) {
+  constructor(validSetting, form) {
     this._validSetting = validSetting;
-    this._formSelector = formSelector;
+    this._form = form;
 
     this._inputList = Array.from(
-      this._formSelector.querySelectorAll(this._validSetting.inputSelector)
+      this._form.querySelectorAll(this._validSetting.inputSelector)
     );
-    this._buttonElement = this._formSelector.querySelector(
+    this._buttonElement = this._form.querySelector(
       this._validSetting.submitButtonSelector
     );
   }
 
   _showInputError(inputElement, errorMessage) {
-    const errorElement = this._formSelector.querySelector(
+    const errorElement = this._form.querySelector(
       `.${inputElement.name}-error`
     );
     inputElement.classList.add(this._validSetting.inputErrorClass);
@@ -21,7 +21,7 @@ export class FormValidator {
   }
 
   _hideInputError(inputElement) {
-    const errorElement = this._formSelector.querySelector(
+    const errorElement = this._form.querySelector(
       `.${inputElement.name}-error`
     );
     inputElement.classList.remove(this._validSetting.inputErrorClass);
