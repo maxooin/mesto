@@ -13,7 +13,7 @@
 4) Gridbox.
 5) Адаптивная вёрстка.
 6) Подключен стороний шрифт.
-7) ООп JavaScript
+7) ООП JavaScript
 8) NPM
 9) Webpack
 
